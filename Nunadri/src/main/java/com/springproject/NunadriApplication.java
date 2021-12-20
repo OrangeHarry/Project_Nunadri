@@ -1,0 +1,13 @@
+package com.springproject;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+@SpringBootApplication
+public class NunadriApplication extends SpringBootServletInitializer{
+
+	public static void main(String[] args) {
+		SpringApplication.run(NunadriApplication.class, args);
+	}
+}

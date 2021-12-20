@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout lang="ko">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-icon-180x180.png">
+  <link href="./assets/favicon.ico" rel="icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+  <title>질문했어요</title>
+
+  <link href="../../css/main.css" rel="stylesheet">
+
+  <style>
+    html {
+      overflow-y: hidden;
+    }
+    .navbar_display {
+      background-color: white;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+    }
+    
+  </style>
+
+</head>
+
+<body class="">
+ 
+ <div th:replace="view/fragments/header::header"></div>
+
+  <div class="hero-full-container white-text-container">
+    <div class="section-container background-image-container">
+      <div class="section-container-spacer text-center">
+        <div class="container">
+          <h1 class="h2">질문했어요</h1>
+           <form th:action="'/CustomerServiceBoardList'" method="post" role="form">
+            <!-- 검색값 화면단에 고정 (값받아오는거 때문)-->
+         <input type="hidden" name="condition" th:value="${condition}"> 
+         <input type="hidden" name="keyword" th:value="${keyword}">  
+          <div id="divsize">
+          <!--검색창-->
+                <div class="div_right" style="width: 33%;">
+               
+               <select name="searchCondition">
+                  <th:each>
+                     <option value="QNA_TITLE">제목
+                     <option value="QNA_CONTENT">내용
+                  </th:each>
+            </select> 
+              <input  name="searchKeyword" type="search" placeholder=" 검색어를 입력하세요">
+              <button type="submit" style="background-color: rgb(10, 55, 50); border: 0;"><i class="fas fa-search icon_search"></i> </button >
+            </div>
+            <!--게시판 목록 표출-->
+            <table class="type04">
+              <tr>
+                <th id="table_width_no">No</th>
+                <th id="table_text">제목</th>
+                <th id="table_width_writer">작성자</th>
+                <th id="table_width_writer">작성일</th>
+              </tr>
+              <tr th:each="customerService, status: ${customerBoardList}">
+                <td th:text="${customerService.qnaNo}"></td  >
+                <td> <a th:text="${customerService.qnaTitle}" th:href="'/CustomerServiceBoardDetail/'+${customerService.qnaNo}+'/'+${customerService.id}"></a></td  >
+                <td th:text="${customerService.nickname}"></td >
+                <td th:text="${customerService.qnaRegDate}"></td >
+              </tr>
+            </table>
+			</div>
+          <!--페이징 처리-->
+          <div>
+         <ul class="pagination">
+      <!--처음으로 버튼
+         pageMaker : 컨트롤러에 noticeBoard안에 선안한값 
+         pageNum = 게시글 넘어가는 페이지값-->
+            <li th:class="pagination_button" style="float:left;margin-left:5px;">
+               <a th:href="'/CustomerServiceBoardList/?pageNum='+${pageMaker.startPage}+'&searchCondition='+${condition}+'&searchKeyword='+${keyword}"><<</a>
+            </li>
+        <!--이전 버튼 마지막 페이지 이동 시 숨김-->
+            <span th:if="${pageMaker.cri.pageNum}!=1">
+               <li th:class="pagination_button" style="float:left;margin-left:5px;">
+                  <a th:href="'/CustomerServiceBoardList/?pageNum='+${pageMaker.cri.pageNum -1}+'&searchCondition='+${condition}+'&searchKeyword='+${keyword}">이전</a>
+               </li>
+            </span>
+            <!--숫자 버튼 게시글 수가 늘어날 수록 하나씩 추가된다.-->
+            <span th:if="${pageMaker.endPage}!=0">
+               <th:block th:each="Num:${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}">
+                  <li th:class="pagination_button" style="float:left;margin-left:5px;">
+                     <a th:href="'/CustomerServiceBoardList/?pageNum='+${Num}+'&searchCondition='+${condition}+'&searchKeyword='+${keyword}" th:text="${Num}"></a>
+                  </li>
+               </th:block>
+            </span>
+           <!-- 다음 버튼 마지막 페이지 이동 시 숨김-->
+            <span th:if="${pageMaker.cri.pageNum}!=${pageMaker.endPage + 1}">
+               <li th:class="pagination_button" style="float:left;margin-left:5px;">
+                  <a th:href="'/CustomerServiceBoardList/?pageNum='+${pageMaker.cri.pageNum +1}+'&searchCondition='+${condition}+'&searchKeyword='+${keyword}">다음</a>
+               </li>
+            </span>
+       <!-- 마지막으로 버튼-->
+            <li th:class="pagination_button" style="float:left;margin-left:5px;">
+               <a th:href="'/CustomerServiceBoardList/?pageNum='+${pageMaker.endPage+1}+'&searchCondition='+${condition}+'&searchKeyword='+${keyword}">>></a>
+            </li>
+         </ul>
+      </div >
+  </form>
+  
+          <!--글쓰기 버튼-->
+          <div class="div_right">
+          <a href="/" class="btn btn-default" id="writerBtn" style="right: 22%;">홈으로</a>   
+            <a href="/CustomerServiceBoard" class="btn btn-default" id="writerBtn">글쓰기</a >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--푸터-->
+  
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      navActivePage();
+    });
+  </script>
+
+  <script>
+    const navbar = document.querySelector('#nav');
+    const navbarHeight = navbar.getBoundingClientRect().height;
+
+    document.addEventListener('scroll', () => {
+      console.log(window.scrollY);
+      if (window.scrollY > navbarHeight) {
+        navbar.classList.add('navbar_display');
+      } else {
+        navbar.classList.remove('navbar_display');
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript" src="../../js/main.js"></script>
+</body>
+
+</html>

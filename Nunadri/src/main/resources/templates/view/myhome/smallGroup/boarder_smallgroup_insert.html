@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout lang="ko">
+     
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <script src="../../../js/jquery.js"></script>
+  <script src="../../../js/jquery-ui.js"></script>
+  <script src="../../../js/jquery.timepicker.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+  <link rel="stylesheet" href="../../../css/jquery-ui.css">
+  <link rel="stylesheet" href="../../../css/jquery.timepicker.css">
+  <title>글 작성</title>
+<style>
+	#picker_color {
+		color: #fff;
+		border: 1px solid #fff;
+		border-radius: 5px;
+		background-color: transparent;
+		margin-bottom: 10px;
+	}
+
+	.input-group>a {
+		position: relative;
+	}
+
+	#divsize2 {
+		margin: 0px auto;
+		width: 60%;
+		text-align: center;
+	}
+
+	#button_color {
+		color: #fff;
+		border: 1px solid #fff;
+		border-radius: 5px;
+	}
+
+	/*파일 이름 뜨게 하는 input박스 설정*/
+	.uploadFileText {
+		background-color: transparent;
+		border-style: none;
+		width: 400px;
+		margin-left: 10px;
+		font-size: small;
+	}
+
+	/*시간선택 css*/
+	.ui-timepicker-viewport {
+		background-color: rgb(10, 55, 50);
+	}
+
+	.ui-timepicker-standard a {
+		color: coral;
+		display: block;
+		padding: 0.2em 0.4em;
+	}
+
+	.ui-widget {
+		font-family: Jua, Gugi sans-serif;
+		font-size: 1em;
+	}
+</style>
+
+  <link href="../../../css/main.css" rel="stylesheet">
+</head>
+
+<body style="overflow: hidden; color:white;">
+   <!-- Add your content of header -->
+  <div th:replace="view/fragments/header::header"></div>
+
+  <div class="hero-full-container white-text-container">
+    <div class="section-container background-image-container">
+      <div class="section-container-spacer text-center">
+        <div class="container">
+          <h1 class="h2">모임 개최</h1>
+          <div id="divsize2">
+            <form action="/insertMyhouseBoard" method="post" enctype="multipart/form-data">
+             
+             <input type="hidden" name="myhouseCategory" value="s">
+             <input type="hidden" name="nickname" th:value="${nickname}">
+             <input type="hidden" name="id" th:value="${#authentication.principal.username}">
+              <input class="datepicker" id="picker_color" name="myhouseDate" placeholder="날짜를 선택하세요" required>
+              <input class="timepicker-no-scrollbar" id="picker_color" name="myhouseTime" placeholder="시간을 선택하세요">
+              <input type="number" min="2" max="9" style="width:177.2px;" id="picker_color" name="peopleMax" placeholder="참여 인원" required>
+
+              <input type="text" class="form-control textbox" id="" name="myhouseTitle" placeholder="제목을 입력해주세요." required>
+              <div class="form-group">
+                <textarea class="form-control" rows="11" name="myhouseContent" placeholder="내용을 입력해주세요" required></textarea>
+                  <div class="input-group">
+                   <input type="file" name="uploadFiles" class="btn btn-default" id="button_color" multiple="multiple" style="display: none;" 
+                     onchange="javascript:document.getElementById('fileName').value = this.value.split('\\')[this.value.split('\\').length-1]">
+                      <a class="btn btn-default" id="button_color"
+                       onclick="document.all.uploadFiles.click();">
+                       &nbsp<i class="far fa-image">&nbsp</i>
+                      </a>
+                      <!--파일 이름 뜨는곳-->
+                      <input type="text" id="fileName" readonly="readonly" class="uploadFileText">
+                  </div>
+              </div>
+              
+              <div class="">
+              	  <button type="submit" class="btn btn-default" id="button_color">글올리기</button >
+                  <a class="btn btn-default" id="button_color" href="/board/s" >목록으로</a  >
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function (event) {
+     navActivePage();
+  });
+
+  $.datepicker.setDefaults({
+  dateFormat: 'yy-mm-dd',
+  prevText: '이전 달',
+  nextText: '다음 달',
+  monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+  monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+  dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+  dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+  showMonthAfterYear: true,
+  yearSuffix: '년'
+  });
+
+  $(function() {
+    $('.datepicker').datepicker({minDate:0});
+  });
+
+  $('.timepicker-no-scrollbar').timepicker({
+    timeFormat: 'h:mm p',
+    interval: 60,
+    defaultTime: '18',
+    startTime: '10:00',
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true	
+  });
+  
+  $(document).ready(function(){
+    $('input.timepicker').timepicker({});
+  });
+  
+
+  const navbar = document.querySelector('#nav');
+    const navbarHeight = navbar.getBoundingClientRect().height;
+
+    document.addEventListener('scroll', () => {
+      console.log(window.scrollY);
+      if (window.scrollY > navbarHeight) {
+        navbar.classList.add('navbar_display');
+      } else {
+        navbar.classList.remove('navbar_display');
+      }
+    });
+</script>
+
+<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b0a2517b770a94b696a3d34e4f2e13ba&libraries=services"></script> -->
+
+ <script type="text/javascript" src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+  <title>마이페이지</title>
+
+  <link href="../../../css/main.css" rel="stylesheet">
+</head>
+<style>
+  .outer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .navbar_display {
+    background-color: white;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    transition: all 300ms ease-in-out;
+  }
+
+  #removeLine h2:after, h2:before, h2:after, h2:before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    background-color: transparent;
+    width: 0;
+}
+.my_profile {
+    display: flex;
+    justify-content: space-evenly;
+    width: 70%;
+    margin: auto;
+  }
+  .fileDrop {
+    height: 300px;
+    border: 5px solid white;
+    border-radius: 20px;
+  } 
+  .profileImg {
+    position: relative; 
+    width: 100px;
+    height: 100px;
+  }
+  .profileImg > img {
+    position: absolute;
+    right: -120%;
+    border-radius: 20px;
+    transform: translate(50, 50);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: auto;
+  }
+
+</style>
+
+<body style="overflow: hidden;">
+
+  <!-- Add your content of header -->
+ <div th:replace="view/fragments/header::header"></div>
+
+<div class="hero-full-container white-text-container">
+    <div class="section-container background-image-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="section-container-spacer text-center">
+              <h1 class="h2">마이페이지</h1>
+              </div>
+            <div>
+              <div id="map" style="width:100%;height:350px; ">
+                <div class="row" style="display: flex; justify-content: center; text-align: center;">
+                  <div class="col-4 col-md-4 fileDrop" id="removeLine">
+                    <h2>프로필</h2>
+                    <br>
+                    <div class="profileImg">
+                        <img th:src="@{'/profile/'+${memberInfo.profile}}" onclick="document.all.profile.click();">
+                    </div>
+                    <br>
+                  <form action="/upload/uploadForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="id" name="id" th:value=${memberInfo.id}>
+                     <input type="file" name="profile" id="profile" onchange="form.submit()" style="display: none;">
+                  </form>
+                   <div class="my_profile">
+                      <div>
+                        <a href="/mypagemodify" class="btn btn-default" style="border-radius: 4px; border: 1px solid white;">내 정보
+                          수정</a>
+                      </div>
+                      <div>
+                        <a href="/changePassword" class="btn btn-default" style="border-radius: 4px; border: 1px solid white;">비밀번호
+                          변경</a>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-4 col-md-4 " style="height:300px; border: 5px solid white; margin-left: 10px;
+              border-radius: 20px;" id="removeLine">
+                    <h2>
+                      본인작성게시글
+                    </h2><br>
+                    <img src="../../../assets/images/mypage.jpg" style=" border-radius: 20px;
+            " width="100px" height="100px" alt="">
+                    <br><br>
+                        <div class="my_profile">
+                      <div>
+                        <a href='/myhouseBoard/n' class="btn btn-default" style="border-radius: 4px; border: 1px solid white;">
+                        우리집 목록</a>
+                      </div>
+                      <div>
+                        <a href="/community/B" class="btn btn-default" style="border-radius: 4px; border: 1px solid white;">
+                        소통해요 목록</a>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        navActivePage();
+      });
+    </script>
+
+    <script>
+    
+      const navbar = document.querySelector('#nav');
+      const navbarHeight = navbar.getBoundingClientRect().height;
+
+      document.addEventListener('scroll', () => {
+        console.log(window.scrollY);
+        if (window.scrollY > navbarHeight) {
+          navbar.classList.add('navbar_display');
+        } else {
+          navbar.classList.remove('navbar_display');
+        }
+      });
+    </script>
+    
+   <!-- <script>
+    $(document).ready(function() {
+        $(".fileDrop").on("dragenter dragover", function(event){
+            event.preventDefault(); // 기본효과 막기
+        });
+        
+         $(".fileDrop").on("drop", function(event) {
+            event.preventDefault();// 기본효과 막기 
+            // 드래그된 파일의 정보
+            var files = event.originalEvent.dataTransfer.files;
+            // 첫번째 파일
+            var file = files[0];
+            // 콘솔에서 파일정보 확인
+            console.log(file);
+            // ajax로 전달할 폼 객체
+            var formData = new FormData();
+            // 폼 객체에 파일추가, append("변수명", 값)
+            formData.append("file", file);
+            
+            $.ajax({
+                type: "post",
+                url: "{path}/upload/uploadAjax",
+                data: formData,
+                dataType: "text",
+                // true : get , false : post
+                processData: false,
+                // false : multipart/form-data
+                contentType: false,
+                // 업로드 성공시
+                success : function(data) {
+                    alert(data);
+                    var str = "";
+                    if(checkImageType(data)) {
+                        str = "<div><a href='${path}/upload/displayFile?fileName="+getImageLink(data)+"'>";
+                        str += "<img src='${path}/upload/displayFile?fileName="+ data +"'></a>";
+                    }
+                    str += "<span data-src="+data+">[삭제]</span></div>";
+                    $(".uploadedList").append(str);
+                }
+        
+                 });
+            });
+        });    
+    </script>-->
+
+
+    <script type="text/javascript" src="../../../js/main.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.js"></script>
+</body>
+
+</html>

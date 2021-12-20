@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springproject.mapper.MyhouseFileMapper">
+
+
+
+
+	<insert id="insertMyhouseFileList"
+		parameterType="com.springproject.vo.FileMyhouseVO">
+		INSERT INTO file_myhouse
+		(
+		FILE_NO
+		, HOUSE_NO
+		, MYHOUSE_NO
+		,
+		MYHOUSE_CATEGORY
+		, MYHOUSE_FILENAME
+		, MYHOUSE_FILE_PATH
+		,
+		MYHOUSE_FILE_SIZE
+		, MYHOUSE_IMG_URL
+
+		) values (
+		(SELECT
+		IFNULL(MAX(FILE_NO), 0) + 1
+		FROM
+		file_myhouse ALIAS_FOR_SUBQUERY
+		WHERE
+		MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND
+		HOUSE_NO = #{houseNo}
+		AND
+		MYHOUSE_NO = #{myhouseNo})
+		, #{houseNo}
+		, #{myhouseNo}
+		,
+		#{myhouseCategory}
+		, #{myhouseFilename}
+		, #{myhouseFilePath}
+		,
+		#{myhouseFileSize}
+		, #{myhouseImgUrl}
+		)
+	</insert>
+
+
+	<delete id="deleteMyhouseFileList">
+		DELETE FROM file_myhouse
+		WHERE myhouse_no = #{myhouseNo}
+		AND MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+		AND FILE_NO = #{fileNo}
+	</delete>
+
+
+
+	<select id="getMyhouseFileList"
+		resultType="com.springproject.vo.FileMyhouseVO">
+		SELECT * FROM file_myhouse
+		WHERE myhouse_no = #{myhouseNo}
+		AND MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+	</select>
+
+
+
+	<select id="getFleamarketList" parameterType="hashMap"
+		resultType="HashMap">
+		SELECT M.HOUSE_NO AS houseNo,
+		M.MYHOUSE_NO AS myhouseNo,
+		M.NICKNAME AS
+		nickname,
+		M.MYHOUSE_TITLE AS myhouseTitle,
+		M.MYHOUSE_CONTENT AS
+		myhouseContent,
+		M.MYHOUSE_REGDATE AS regDate,
+		M.MYHOUSE_HIT AS hit,
+		M.PRICE AS price,
+		F.FILE_NO AS fileNo,
+		F.MYHOUSE_FILENAME AS fileName,
+		F.MYHOUSE_IMG_URL AS myhouseImgUrl
+		FROM `NOTICE_MYHOUSE` AS M
+		LEFT OUTER
+		JOIN
+		`FILE_MYHOUSE` AS F
+		ON M.HOUSE_NO = f.house_no
+		AND
+		m.myhouse_category =
+		f.myhouse_category
+		AND m.myhouse_no = f.myhouse_no
+		WHERE
+		m.MYHOUSE_CATEGORY = 'm'
+		AND m.HOUSE_NO =
+		#{fleaMarketList.houseNo}
+		AND f.File_NO = 1
+
+		<if test="fleaMarketList.searchCondition == 'MYHOUSE_TITLE'">
+			AND MYHOUSE_TITLE LIKE CONCAT('%',
+			#{fleaMarketList.searchKeyword}, '%')
+		</if>
+		<if test="fleaMarketList.searchCondition == 'MYHOUSE_CONTENT'">
+			AND MYHOUSE_CONTENT LIKE CONCAT('%',
+			#{fleaMarketList.searchKeyword},
+			'%')
+		</if>
+		<if test="fleaMarketList.searchCondition == 'NICKNAME'">
+			AND NICKNAME LIKE CONCAT('%',
+			#{fleaMarketList.searchKeyword}, '%')
+		</if>
+
+		ORDER BY M.MYHOUSE_NO DESC
+		LIMIT #{criteria.amount} OFFSET
+		#{criteria.startNum}
+
+	</select>
+
+
+
+	<select id="getItem"
+		parameterType="com.springproject.vo.NoticeMyhouseVO"
+		resultType="HashMap">
+		SELECT M.HOUSE_NO AS houseNo,
+		M.MYHOUSE_NO AS myhouseNo,
+		M.NICKNAME AS nickname,
+		M.MYHOUSE_TITLE AS myhouseTitle,
+		M.MYHOUSE_CONTENT AS myhouseContent,
+		M.MYHOUSE_REGDATE AS regDate,
+		M.MYHOUSE_HIT AS hit,
+		M.ID AS id,
+		M.PRICE AS price,
+		F.FILE_NO AS fileNo,
+		F.MYHOUSE_FILENAME AS fileName,
+		F.MYHOUSE_IMG_URL AS myhouseImgUrl
+		FROM
+		`NOTICE_MYHOUSE` AS M
+		LEFT OUTER JOIN
+		`FILE_MYHOUSE` AS F
+		ON M.HOUSE_NO =
+		f.house_no
+		AND m.myhouse_category =
+		f.myhouse_category
+		AND m.myhouse_no =
+		f.myhouse_no
+		WHERE
+		m.MYHOUSE_CATEGORY = 'm'
+		AND m.HOUSE_NO = #{houseNo}
+		AND m.myhouse_no = #{myhouseNo}
+	</select>
+
+
+
+
+
+	<!-- 글 삭제 시 파일 이미지 모두 삭제 -->
+
+	<delete id="deleteMyhouseFileAll">
+		DELETE FROM file_myhouse
+		WHERE myhouse_no =
+		#{myhouseNo}
+		AND MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND HOUSE_NO =
+		#{houseNo}
+	</delete>
+
+
+</mapper>

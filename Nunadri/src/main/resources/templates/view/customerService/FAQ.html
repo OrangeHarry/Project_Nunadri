@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout lang="ko">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+
+  <link rel="stylesheet" link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+
+  <title>고객센터</title>
+
+
+  <link href="../../css/main.css" rel="stylesheet">
+  <link href="./Boastcss.css" rel="stylesheet2">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../../js/main.js"></script>
+  <style>
+    
+    .qna {
+      height: 200px;
+    }
+
+    .qna .box.text {
+      padding: 20px 50px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .qna .box.text>h2 {
+      text-align: center;
+      position: relative;
+    }
+
+    .qna .box.text>h2:after {
+      content: "\f054";
+      font-family: "Font Awesome 5 Pro";
+      position: absolute;
+      right: 0;
+      top: 0;
+      transform: rotate(0deg);
+      transition: 0.25s;
+    }
+
+    .qna .box.text.qna_show>h2:after {
+      transform: rotate(90deg);
+    }
+
+    .qna .box.text>h2:before {
+      content: "Q. ";
+    }
+
+    .qna .box.text>.box_content {
+      overflow: hidden;
+      padding: 0 50px;
+      display: none;
+    }
+
+    .qna .box.text>.box_content p:first-of-type:before {
+      content: "A. ";
+      font-weight: bold;
+    }
+
+
+    .hero-full-container {
+      height: 100vh;
+      color: black;
+    }
+
+
+  </style>
+</head>
+
+
+<body class="">
+
+	<div th:replace="view/fragments/header::header"></div>
+
+	<div class="hero-full-container">
+		<div class="section-container_detail">
+			<div class="section-container-spacer text-center">
+				<div class="container2">
+					<h1 class="h2 font_black">고객센터</h1>
+					<form action="/FAQ" method="get">
+						<p>너나들이의 대표질문입니다.</p>
+						<div id="divsize">
+						</div>
+
+						<!--<div class="section-container">-->
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-8 col-sm-offset-2 section-container-spacer">
+										<div class="qna">
+											<div class="custom_page_123"></div>
+
+											<div class="col col2" id="col2">
+												<div id="boxholder_1" class="box cpbox text">
+													<h2 class="boast_h2 font_black">너나들이는 어떤 서비스 인가요?</h2>
+													<div class="box_content">
+														<p>너나들이는 한건물내에 있는 이웃들끼리 좀 더 편하고 자유롭게 소통할 수 있는 한 건물 커뮤니티 플랫폼입니다.
+															우리 옆집에 누가 사는지도 모르는 현대 사회에서 이웃끼리 조금 더 편하고 프라이빗하게 소통을 하여
+															하나의 작은 네트워킹을 형성하는 것을 목표로 하는 하이퍼로컬 기반의 서비스입니다.</p>
+													</div>
+													<div class="clear">
+														<!--space-->
+													</div>
+												</div>
+
+												<div class="col col2" id="col2">
+													<div id="boxholder_1" class="box cpbox text">
+														<h2 class="boast_h2 font_black">같은건물에 사는 사람들 끼리만 이용가능한가요?</h2>
+														<div class="box_content">
+															<p>네 맞습니다! 저희 너나들이는 한 건물내에 있는 사람들끼리만 프라이빗하게 소통할 수 있는 커뮤니티
+																플랫폼입니다.
+																다른 건물에 거주하는 이웃들과는 소통해요 카테고리를 통해서 소통할 수 있습니다.</p>
+														</div>
+														<div class="clear">
+															<!--space-->
+														</div>
+
+													</div>
+
+													<div class="col col2" id="col2">
+														<div id="boxholder_1" class="box cpbox text">
+															<h2 class="boast_h2 font_black">우리집 카테고리에 아무런 게시글이 없어요</h2>
+															<div class="box_content">
+																<p>우선 저희 너나들이에 가입해주셔서 감사합니다. 우리집 카테고리에 아무 글이 없는 경우는 해당
+																	건물에 첫번째 가입자이실 경우에는
+																	그럴 수 있습니다. 좀 더 자세한 문의 내용은 건의해요를 통해 남겨 주시면 더욱 상세한 답변을
+																	받으실 수 있습니다.</p>
+															</div>
+															<div class="clear">
+																<!--space-->
+															</div>
+
+														</div>
+
+														<div class="col col2" id="col2">
+															<div id="boxholder_1" class="box cpbox text">
+																<h2 class="boast_h2 font_black">너나들이에서 다루는 컨텐츠는 어떤것이
+																	있나요?</h2>
+																<div class="box_content">
+																	<p>너나들이에서 다루는 컨텐츠는 우리집내에서는 소통,모임,거래로 구분되며 소통해요에서는
+																		소통,사진 컨텐츠롤 제공합니다.
+																	</p>
+																</div>
+																<div class="clear">
+																	<!--space-->
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<script>
+							document.addEventListener("DOMContentLoaded", function (event) {
+								navActivePage();
+							});
+							const navbar = document.querySelector('#nav');
+							const navbarHeight = navbar.getBoundingClientRect().height;
+
+							document.addEventListener('scroll', () => {
+								console.log(window.scrollY);
+								if (window.scrollY > navbarHeight) {
+									navbar.classList.add('navbar_display');
+								} else {
+									navbar.classList.remove('navbar_display');
+								}
+							});
+						</script>
+
+						<!-- Google Analytics: change UA-XXXXX-X to be your site's ID 
+
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-XXXXX-X', 'auto');
+  ga('send', 'pageview');
+</script>
+
+-->
+						<script type="text/javascript" src="../../js/jquery-ui.js"></script>
+</body>
+
+</html>

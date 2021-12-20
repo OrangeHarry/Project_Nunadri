@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.springproject.mapper.MyhouseMapper">
+
+
+	<insert id="insertMyhouseBoard">
+		INSERT INTO NOTICE_MYHOUSE
+		(
+		MYHOUSE_NO
+		,
+		MYHOUSE_CATEGORY
+		, ID
+		, NICKNAME
+		,HOUSE_NO
+		, MYHOUSE_TITLE
+		,
+		MYHOUSE_CONTENT
+		, MYHOUSE_REGDATE
+		, MYHOUSE_HIT
+		,PRICE
+		, MYHOUSE_DATE
+		,
+		MYHOUSE_TIME
+		, PEOPLE_MAX
+		, PEOPLE_JOIN
+
+
+		) values (
+		(SELECT
+		IFNULL(MAX(MYHOUSE_NO), 0) + 1
+		FROM
+		NOTICE_MYHOUSE ALIAS_FOR_SUBQUERY
+		WHERE
+		MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND
+		HOUSE_NO = #{houseNo})
+		, #{myhouseCategory}
+		, #{id}
+		, #{nickname}
+		, #{houseNo}
+		,
+		#{myhouseTitle}
+		, #{myhouseContent}
+		, NOW()
+		,0
+		, #{price}
+		, #{myhouseDate}
+		, #{myhouseTime}
+		, #{peopleMax}
+		,1
+		)
+	</insert>
+
+	<select id="getMyhouseBoardList"
+		resultType="com.springproject.vo.NoticeMyhouseVO"
+		parameterType="HashMap">
+		SELECT * FROM NOTICE_MYHOUSE
+		WHERE MYHOUSE_CATEGORY = #{boardList.myhouseCategory}
+		AND HOUSE_NO =
+		#{boardList.houseNo}
+
+		<if test="boardList.searchCondition == 'MYHOUSE_TITLE'">
+			AND MYHOUSE_TITLE LIKE CONCAT('%', #{boardList.searchKeyword}, '%')
+		</if>
+		<if test="boardList.searchCondition == 'MYHOUSE_CONTENT'">
+			AND MYHOUSE_CONTENT LIKE CONCAT('%', #{boardList.searchKeyword}, '%')
+		</if>
+		<if test="boardList.searchCondition == 'NICKNAME'">
+			AND NICKNAME LIKE CONCAT('%', #{boardList.searchKeyword}, '%')
+		</if>
+
+		ORDER BY MYHOUSE_NO DESC
+		LIMIT #{criteria.amount} OFFSET #{criteria.startNum}
+
+	</select>
+
+	<select id="memberMyhouseBoardList"
+		resultType="com.springproject.vo.NoticeMyhouseVO"
+		parameterType="HashMap">
+		SELECT * FROM NOTICE_MYHOUSE
+		WHERE MYHOUSE_CATEGORY = #{paramList.myhouseCategory}
+		AND HOUSE_NO =
+		#{paramList.houseNo}
+		AND ID = #{paramList.id}
+
+		<if test="paramList.searchCondition == 'MYHOUSE_TITLE'">
+			AND MYHOUSE_TITLE LIKE CONCAT('%', #{paramList.searchKeyword}, '%')
+		</if>
+		<if test="paramList.searchCondition == 'MYHOUSE_CONTENT'">
+			AND MYHOUSE_CONTENT LIKE CONCAT('%', #{paramList.searchKeyword}, '%')
+		</if>
+		<if test="paramList.searchCondition == 'NICKNAME'">
+			AND NICKNAME LIKE CONCAT('%', #{paramList.searchKeyword}, '%')
+		</if>
+
+		ORDER BY MYHOUSE_NO DESC
+		LIMIT #{criteria.amount} OFFSET #{criteria.startNum}
+
+	</select>
+
+
+
+	<!-- 페이징 카운트 쿼리문 -->
+	<select id="selectMyHouseBoardCount" resultType="int">
+		SELECT COUNT(*) FROM NOTICE_MYHOUSE
+		WHERE MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+		<if test="searchCondition == 'MYHOUSE_TITLE'">
+			AND MYHOUSE_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'MYHOUSE_CONTENT'">
+			AND MYHOUSE_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'NICKNAME'">
+			AND NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+
+	</select>
+
+
+	<!-- 조회수 증가 쿼리 -->
+	<update id="hitIncrease">
+		UPDATE NOTICE_MYHOUSE
+		SET myhouse_hit = myhouse_hit + 1
+		WHERE myhouse_no = #{myhouseNo}
+		AND myhouse_category = #{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+	</update>
+
+
+	<select id="getMyhouseBoard"
+		resultType="com.springproject.vo.NoticeMyhouseVO">
+		SELECT * FROM NOTICE_MYHOUSE
+		WHERE MYHOUSE_NO = #{myhouseNo}
+		AND MYHOUSE_CATEGORY =#{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+	</select>
+
+
+	<delete id="deleteBoardSeq">
+		DELETE FROM Notice_Myhouse
+		WHERE myhouse_no = #{myhouseNo}
+		AND MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+	</delete>
+
+
+
+	<delete id="deleteMyhouseCommentList">
+		DELETE FROM myhouse_comment
+		WHERE myhouse_no = #{myhouseNo}
+		AND MYHOUSE_CATEGORY = #{myhouseCategory}
+		AND HOUSE_NO = #{houseNo}
+	</delete>
+
+
+
+
+	<select id="getHouseNo" resultType="int">
+		SELECT HOUSE_NO FROM house WHERE address = (SELECT address
+		from member WHERE
+		nickname = #{nickname})
+	</select>
+
+
+	<update id="updateMyhouseBoard"
+		parameterType="com.springproject.vo.NoticeMyhouseVO">
+
+		UPDATE Notice_Myhouse SET MYHOUSE_TITLE = #{myhouseTitle}
+		,MYHOUSE_CONTENT = #{myhouseContent}
+		,MYHOUSE_REGDATE = NOW()
+		,MYHOUSE_DATE = #{myhouseDate}
+		,MYHOUSE_TIME = #{myhouseTime}
+		,PEOPLE_MAX = #{peopleMax}
+		WHERE myhouse_no = #{myhouseNo}
+		AND MYHOUSE_CATEGORY = #{myhouseCategory} AND HOUSE_NO = #{houseNo}
+	</update>
+
+
+
+	<select id="getMyhouseNo" resultType="int">
+		SELECT
+		IFNULL(MAX(MYHOUSE_NO),0) + 1
+		FROM NOTICE_MYHOUSE
+		WHERE HOUSE_NO =
+		#{houseNo}
+		AND
+		MYHOUSE_CATEGORY = #{myhouseCategory}
+	</select>
+
+	<!-- 소모임 참여 인원 증가 쿼리 -->
+	<update id="peopleJoinIncrease">
+		UPDATE NOTICE_MYHOUSE
+		SET PEOPLE_JOIN = PEOPLE_JOIN + 1
+		WHERE myhouse_no = #{myhouseNo}
+		AND myhouse_category = 's'
+		AND HOUSE_NO = #{houseNo}
+	</update>
+
+	<!-- 소모임 참여 인원 감소 쿼리 -->
+	<update id="peopleJoinDecrease">
+		UPDATE NOTICE_MYHOUSE
+		SET PEOPLE_JOIN = PEOPLE_JOIN - 1
+		WHERE myhouse_no = #{myhouseNo}
+		AND myhouse_category = 's'
+		AND HOUSE_NO = #{houseNo}
+	</update>
+
+</mapper>

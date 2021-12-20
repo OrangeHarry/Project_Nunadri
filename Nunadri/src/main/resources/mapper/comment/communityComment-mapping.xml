@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper
+	namespace="com.springproject.mapper.CommunityCommentMapper">
+
+	<sql id="communityComment">
+		NOTICE_CATEGORY
+		,NOTICE_NO
+		,COMMUNITY_COMMENT_NO
+		,COMMUNITY_COMMENT
+		,NICKNAME
+		,ID
+		,COMMUNITY_COMMENT_REGDATE
+	</sql>
+
+
+	<insert id="insertCommunityComment">
+		INSERT INTO COMMUNITY_COMMENT
+		(
+		COMMUNITY_COMMENT_NO
+		, NOTICE_CATEGORY
+		, NOTICE_NO
+		, NICKNAME
+		, ID
+		, COMMUNITY_COMMENT
+		, COMMUNITY_COMMENT_REGDATE
+
+		) VALUES (
+		(SELECT
+		IFNULL(MAX(COMMUNITY_COMMENT_NO), 0) + 1
+		FROM
+		COMMUNITY_COMMENT ALIAS_FOR_SUBQUERY
+		WHERE
+		NOTICE_CATEGORY =#{noticeCategory}
+		AND
+		NOTICE_NO = #{noticeNo})
+		, #{noticeCategory}
+		, #{noticeNo}
+		, #{nickname}
+		, #{id}
+		, #{communityComment}
+		, NOW()
+		)
+	</insert>
+
+	<select id="getCommunityComment" resultType="CommunityCommentVO">
+		SELECT * FROM COMMUNITY_COMMENT
+		WHERE
+		NOTICE_CATEGORY =#{noticeCategory}
+		AND
+		NOTICE_NO = #{noticeNo}
+		ORDER BY COMMUNITY_COMMENT_NO ASC
+	</select>
+
+	<delete id="deleteCommunityComment">
+		DELETE FROM COMMUNITY_COMMENT
+		WHERE
+		COMMUNITY_COMMENT_NO = #{communityCommentNo}
+		AND
+		NOTICE_CATEGORY =#{noticeCategory}
+		AND
+		NOTICE_NO = #{noticeNo}
+	</delete>
+
+	<select id="getProfile" parameterType="HashMap"
+		resultType="com.springproject.dto.CommunityCommentDto">
+		SELECT
+		C.ID,
+		C.NICKNAME,
+		M.PROFILE,
+		C.COMMUNITY_COMMENT_NO,
+		C.COMMUNITY_COMMENT,
+		C.NOTICE_CATEGORY,
+		C.NOTICE_NO
+		FROM
+		projectdb.COMMUNITY_COMMENT AS C INNER JOIN projectdb.MEMBER AS M
+		ON
+		C.ID = M.ID
+		WHERE
+		C.NOTICE_CATEGORY = #{comment.noticeCategory}
+		AND
+		C.NOTICE_NO = #{comment.noticeNo}
+
+		ORDER BY C.COMMUNITY_COMMENT_NO ASC;
+
+	</select>
+
+</mapper>

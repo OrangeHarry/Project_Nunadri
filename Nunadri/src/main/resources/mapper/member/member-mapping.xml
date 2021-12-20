@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.springproject.mapper.MemberMapper">
+
+	<select id="findId" parameterType="String"
+		resultType="com.springproject.vo.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE ID = #{id}
+	</select>
+
+	<select id="findAddress" parameterType="String"
+		resultType="String">
+		SELECT ADDRESS FROM HOUSE
+		WHERE ADDRESS = #{address}
+	</select>
+
+	<select id="findEmail" parameterType="String"
+		resultType="com.springproject.vo.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE EMAIL = #{email}
+	</select>
+
+	<select id="findNickname" parameterType="String"
+		resultType="com.springproject.vo.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE NICKNAME = #{nickname}
+	</select>
+
+	<select id="getMemberInfo" parameterType="String"
+		resultType="com.springproject.vo.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE id = #{id}
+	</select>
+
+	<select id="getAdminInfo"
+		resultType="com.springproject.vo.MemberVO" parameterType="HashMap">
+		SELECT * FROM MEMBER
+		WHERE 1=1
+		<if test="adminInfo.searchCondition == 'ADDRESS'">
+			AND ADDRESS LIKE CONCAT('%', #{adminInfo.searchKeyword}, '%')
+		</if>
+		<if test="adminInfo.searchCondition == 'ID'">
+			AND ID LIKE CONCAT('%', #{adminInfo.searchKeyword}, '%')
+		</if>
+		<if test="adminInfo.searchCondition == 'NICKNAME'">
+			AND NICKNAME LIKE CONCAT('%', #{adminInfo.searchKeyword}, '%')
+		</if>
+
+		LIMIT #{criteria.amount} OFFSET #{criteria.startNum}
+	</select>
+
+	<!-- 페이징 카운트 쿼리문 -->
+	<select id="selectMyHouseMemberCount" resultType="int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE 1 = 1
+		<if test="searchCondition == 'ADDRESS'">
+			AND ADDRESS LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'ID'">
+			AND ID LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'NICKNAME'">
+			AND NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+
+	<update id="updatePwd"
+		parameterType="com.springproject.vo.MemberVO">
+		UPDATE MEMBER SET PWD=#{pwd} WHERE ID=#{id}
+	</update>
+
+
+	<delete id="deleteMember" parameterType="String">
+		delete from MEMBER where ID = #{id};
+	</delete>
+
+
+
+
+
+	<insert id="join" parameterType="com.springproject.vo.MemberVO">
+		INSERT INTO MEMBER(
+		ID
+		,PWD
+		,ADDRESS
+		,ADDRESS_DETAIL
+		,NAME
+		,NICKNAME
+		,EMAIL
+		,ROLE
+		,PROVIDER
+		,PROFILE
+
+		)
+		VALUES (
+		#{id}
+		,#{pwd}
+		,#{address}
+		,#{addressDetail}
+		,#{name}
+		,#{nickname}
+		,#{email}
+		,#{role}
+		,#{provider}
+		,'default.png'
+		)
+
+
+	</insert>
+
+	<insert id="insertHouse"
+		parameterType="com.springproject.vo.MemberVO">
+		INSERT INTO HOUSE(
+		HOUSE_NO
+		, ADDRESS
+		)
+		VALUES(
+		(SELECT IFNULL(MAX(HOUSE_NO), 0) + 1 FROM projectdb.HOUSE ALIAS_FOR_SUBQUERY)
+		, #{address}
+		)
+
+	</insert>
+
+
+
+	<update id="updateMember"
+		parameterType="com.springproject.vo.MemberVO">
+
+		UPDATE MEMBER SET ADDRESS=#{address},
+		ADDRESS_DETAIL=#{addressDetail},
+		NAME=#{name}, NICKNAME=#{nickname},
+		EMAIL=#{email} WHERE ID = #{id}
+	</update>
+
+
+
+
+	<!-- 프로필 업로드용 -->
+	<update id="updateProfile"
+		parameterType="com.springproject.vo.MemberVO">
+		UPDATE MEMBER SET PROFILE = #{profile}
+		WHERE ID = #{id}
+	</update>
+
+
+</mapper>
