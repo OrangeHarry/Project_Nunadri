@@ -31,7 +31,7 @@
   </ul>
   <br>
   
-# <h2>⚒️사용기술</h2>
+ <h2>⚒️사용기술</h2>
 
 <img src="https://user-images.githubusercontent.com/86067390/147083000-4e2f4c43-858a-482a-b8fc-24b04a237007.png"  width="400" height="300"/>
 <img src="https://user-images.githubusercontent.com/86067390/147083001-78abe1ad-033d-4245-b9db-98d6e99b9433.png"  width="400" height="300"/>
