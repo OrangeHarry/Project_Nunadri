@@ -6,7 +6,6 @@
   같은 건물 내에 사는 사람들을 중심으로 커뮤니티를 형성하여 유기적인 소통과 다양한 활동 등을 활성화시켜 작은 범위의 네트워킹을 형성하는 것을 목표로 하는 서비스 입니다.</p>
  
 ![우리집 메인](https://user-images.githubusercontent.com/86067390/147085479-5bd98914-20b9-47b6-93d0-8ccd981b0f7f.png)
- 
   
 <h2>🗓️개발기간</h2>
   <p>2021.11.8 ~ 2021.12.15</p>
@@ -31,7 +30,7 @@
   </ul>
   <br>
   
- <h2>⚒️사용기술</h2>
+ <h2>⚒️사용기술 </h2>
 
 <img src="https://user-images.githubusercontent.com/86067390/147083000-4e2f4c43-858a-482a-b8fc-24b04a237007.png"  width="400" height="300"/>
 <img src="https://user-images.githubusercontent.com/86067390/147083001-78abe1ad-033d-4245-b9db-98d6e99b9433.png"  width="400" height="300"/>
