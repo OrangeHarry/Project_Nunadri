@@ -1,10 +1,8 @@
 <div align=left>
   
 <h2>🏠너나들이</h2>
-  
 <p>너나들이 란 같은 건물내의 이웃들끼리 소통할 수 있는 웹 커뮤니티 입니다.
   같은 건물 내에 사는 사람들을 중심으로 커뮤니티를 형성하여 유기적인 소통과 다양한 활동 등을 활성화시켜 작은 범위의 네트워킹을 형성하는 것을 목표로 하는 서비스 입니다.</p>
- 
 ![우리집 메인](https://user-images.githubusercontent.com/86067390/147085479-5bd98914-20b9-47b6-93d0-8ccd981b0f7f.png)
   
 <h2>🗓️개발기간</h2>
@@ -40,5 +38,4 @@
 # <h2>🧑‍💻소개파일 및 발표영상</h2>
    [너나들이 소개파일](https://github.com/OrangeHarry/Project_Nunadri/blob/main/%EB%84%88%EB%82%98%EB%93%A4%EC%9D%B4.pdf) <br>
    [너나들이 발표영상](https://www.youtube.com/watch?v=zBa-5TQROUY)
-  
 </div>
